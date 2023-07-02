@@ -1,0 +1,57 @@
+esphome:
+  name: ydrip
+  includes:
+    - ydrip.h
+    - ydrip.cpp
+    - ExtRtc.h
+    - ExtRtc.cpp
+    - StatusLED.h
+    - StatusLED.cpp
+    - Fram.h
+    - Fram.cpp
+    - WaterMeterReader.h
+    - WaterMeterReader.cpp
+  libraries:
+      - Wire
+  on_loop:
+    - if:
+        condition:
+          api.connected:
+        then:
+          - delay: 2s
+          - deep_sleep.enter:
+
+deep_sleep:
+  wakeup_pin: 8
+
+esp32:
+  board: esp32-s3-devkitc-1
+
+  framework:
+    type: arduino
+    platform_version: platformio/espressif32 @ 5.2.0
+
+api:
+
+wifi:
+  !include wifi.yaml
+
+sensor:
+  - platform: custom
+    lambda: |-
+      uint16_t wakeup_count = 11; // equal to 11 rotations of the water meter
+      auto ydrip_sensor = new esphome::ydrip::Ydrip(wakeup_count);
+      App.register_component(ydrip_sensor);
+      return {ydrip_sensor};
+    sensors:
+      name: "YDrip"
+      unit_of_measurement: 'L'
+      accuracy_decimals: 0
+
+i2c:
+  sda: 4
+  scl: 5
+  scan: False
+
+logger:
+  level: DEBUG
