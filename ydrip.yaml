@@ -18,8 +18,8 @@ esphome:
         condition:
           api.connected:
         then:
-          #- delay: 5s
-          #- deep_sleep.enter:
+          - delay: 5s
+            - deep_sleep.enter:
   on_shutdown:
     # Leaving wifi on increases sleep current by 1.4uA so turn it off. Maybe turnning of the ADC is better?
     # https://github.com/esphome/issues/issues/1668
@@ -30,7 +30,7 @@ deep_sleep:
     mode: ANY_HIGH
     pins:
       - GPIO8
-      - GPIO18
+      - GPIO3
 
 esp32:
   board: esp32-s3-devkitc-1

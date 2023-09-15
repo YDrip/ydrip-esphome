@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GPDProject version="25" oldestCompatibleVersion="25" GPDVersion="6.34.001" lastChange="2023-07-19 10:45 AM">
+<GPDProject version="26" oldestCompatibleVersion="26" GPDVersion="6.37.001" lastChange="8/21/23 2:00 PM" projectChecksumState="1" projectChecksum="76f1f09e">
     <generalProjectSettings/>
     <chip family="04" type="06" friendlyName="GreenPAK 6" partNumber="36" package="16">
-        <nvmData registerLenght="2048">1 E0 E3 D8 F3 40 90 E4 4B 93 3F 51 3E 0 0 0 0 0 0 E0 67 E 0 38 0 0 38 23 10 C5 0 15 1 61 C 38 26 B0 C1 40 9 8B 0 0 0 0 E0 3 0 0 0 0 0 0 0 0 0 40 44 FE DD FF FE DB F 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 30 0 30 30 30 30 0 0 30 80 0 0 0 0 0 30 3 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 55 22 30 C C8 0 0 0 0 0 0 4A 64 0 0 40 40 40 0 0 0 D6 8 F7 3 0 0 1 0 0 EF 10 1F 0 2 0 5E 1 10 0 EE 0 64 2 0 E 3F 10 0 EE 0 A 2 0 5E 1 10 0 EE 0 64 1 0 EE 0 A 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 A5</nvmData>
+        <nvmData registerLenght="2048">1 E0 E3 D8 F3 40 90 E4 4B 93 3F 51 BE F 0 0 0 0 0 E0 67 E 0 38 0 0 38 23 10 C5 0 15 1 61 C 38 26 B0 C1 40 9 8B 0 0 0 0 E0 3 0 0 0 0 0 0 0 0 0 40 44 FE DD F 0 EF 5F FD 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 30 0 30 30 30 30 0 0 30 80 0 0 0 30 0 0 3 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 55 22 30 C C4 0 0 0 0 4 0 4A 64 0 0 40 40 40 55 0 0 D6 8 F7 3 0 0 1 0 0 EF 10 1F 0 2 0 5E 1 10 0 EE 0 64 2 0 E 3F 10 0 EE 0 A 2 0 5E 1 10 0 EE 0 64 1 0 EE 0 A 0 0 0 2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 A5</nvmData>
         <eepromData id="0">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</eepromData>
-        <checksum crc32="0x79B1A8C6" version="7"/>
+        <checksum crc32="0x7C84C0D2" version="7"/>
         <VDDItem id="0">
             <item id="0" caption="VDD (PIN 20)">
                 <graphics pos="(-603.65,-58.04)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
@@ -80,19 +80,19 @@
                 <graphics pos="(555.96,96.20)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
             </item>
         </IOPad>
-        <IOPad id="15" useCaseMode="2">
+        <IOPad id="15" useCaseMode="0">
             <item id="15" caption="PIN 5 (IO10)">
-                <graphics pos="(549.52,-161.80)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
+                <graphics pos="(575.80,365.00)" angle="0" flipping="1" hidden="1" tOrigin="(20.00,10.00)"/>
             </item>
         </IOPad>
         <IOPad id="16" useCaseMode="2">
             <item id="16" caption="PIN 4 (IO11)">
-                <graphics pos="(555.96,315.31)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
+                <graphics pos="(547.11,-161.93)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
             </item>
         </IOPad>
-        <IOPad id="17" useCaseMode="0">
+        <IOPad id="17" useCaseMode="2">
             <item id="17" caption="PIN 3 (IO12)">
-                <graphics pos="(-803.19,406.61)" angle="90" flipping="1" hidden="1" tOrigin="(20.00,10.00)"/>
+                <graphics pos="(540.30,-245.71)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
             </item>
         </IOPad>
         <IOPad id="18" useCaseMode="3">
@@ -109,7 +109,7 @@
             <graphics pos="(-440.72,60.80)" angle="0" flipping="0" hidden="0" tOrigin="(25.00,28.00)"/>
         </item>
         <item id="21" caption="A CMP1H">
-            <graphics pos="(-453.93,186.78)" angle="0" flipping="0" hidden="1" tOrigin="(25.00,28.00)"/>
+            <graphics pos="(-436.79,209.63)" angle="0" flipping="0" hidden="1" tOrigin="(25.00,28.00)"/>
         </item>
         <item id="22" caption="A CMP2L">
             <graphics pos="(-404.35,275.94)" angle="0" flipping="0" hidden="1" tOrigin="(25.00,28.00)"/>
@@ -121,10 +121,10 @@
             <graphics pos="(319.20,424.53)" angle="0" flipping="0" hidden="1" tOrigin="(17.50,10.00)"/>
         </item>
         <item id="25" caption="VREF0">
-            <graphics pos="(-435.38,211.13)" angle="0" flipping="0" hidden="0" tOrigin="(17.50,10.00)"/>
+            <graphics pos="(-438.81,-52.77)" angle="0" flipping="0" hidden="0" tOrigin="(17.50,10.00)"/>
         </item>
         <item id="26" caption="VREF1">
-            <graphics pos="(262.49,-58.76)" angle="0" flipping="0" hidden="1" tOrigin="(17.50,10.00)"/>
+            <graphics pos="(-347.56,-62.19)" angle="0" flipping="0" hidden="1" tOrigin="(17.50,10.00)"/>
         </item>
         <item id="27" caption="POR">
             <graphics pos="(-137.76,-79.71)" angle="0" flipping="0" hidden="0" tOrigin="(17.50,10.00)"/>
@@ -142,7 +142,7 @@
             <graphics pos="(495.57,-60.16)" angle="0" flipping="0" hidden="0" tOrigin="(25.00,45.00)"/>
         </item>
         <item id="32" caption="TEMP SENSOR">
-            <graphics pos="(320.00,370.00)" angle="0" flipping="0" hidden="1" tOrigin="(28.00,15.00)"/>
+            <graphics pos="(213.75,276.32)" angle="0" flipping="0" hidden="1" tOrigin="(28.00,15.00)"/>
         </item>
         <item id="33" caption="FILTER/EDGE DET">
             <graphics pos="(-40.81,221.11)" angle="0" flipping="0" hidden="0" tOrigin="(27.50,15.00)"/>
@@ -175,9 +175,9 @@
         <item id="41" caption="3-bit LUT2/DFF/LATCH5">
             <graphics pos="(291.72,357.94)" angle="0" flipping="0" hidden="0" tOrigin="(25.00,10.00)"/>
         </item>
-        <LUT id="42" regularShape="0" mode="0">
+        <LUT id="42" regularShape="0" mode="2">
             <item id="42" caption="3-bit LUT3/DFF/LATCH6">
-                <graphics pos="(124.51,351.76)" angle="90" flipping="0" hidden="1" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(392.98,-248.01)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
             </item>
         </LUT>
         <LUT id="43" regularShape="0" mode="0">
@@ -336,9 +336,6 @@
         <wire output="0" input="525" autoRouting="1" pen="#ff8000ff;1.00;1;32;128" lineType="2" protected="1" CWLid="-1" wireText="VDD" wireState="1">
             <points/>
         </wire>
-        <wire output="0" input="528" autoRouting="1" pen="#ff8000ff;1.00;1;32;128" lineType="2" protected="1" CWLid="-1" wireText="VDD" wireState="1">
-            <points/>
-        </wire>
         <wire output="0" input="522" autoRouting="1" pen="#ff8000ff;1.00;1;32;128" lineType="2" protected="1" CWLid="-1" wireText="VDD" wireState="1">
             <points/>
         </wire>
@@ -346,7 +343,7 @@
             <points/>
         </wire>
         <wire output="157" input="84" autoRouting="1" pen="#ff8000ff;1.00;1;32;128" lineType="2" protected="1" CWLid="21" wireText="NET21" wireState="0">
-            <points>(-542.00,74.00); (-480.00,74.00); (-480.00,73.00); (-462.00,73.00)</points>
+            <points>(-542.00,74.00); (-484.00,74.00); (-484.00,73.00); (-462.00,73.00)</points>
         </wire>
         <wire output="84" input="622" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="20" wireText="MAIN_CLK" wireState="0">
             <points>(-380.00,-156.00); (-303.00,-156.00)</points>
@@ -371,9 +368,6 @@
         </wire>
         <wire output="62" input="639" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="27" wireText="RESET 1" wireState="1">
             <points/>
-        </wire>
-        <wire output="192" input="527" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="15" wireText="NET15" wireState="0">
-            <points>(-192.00,-156.00); (527.00,-156.00)</points>
         </wire>
         <wire output="0" input="531" autoRouting="1" pen="#ff8000ff;1.00;1;32;128" lineType="2" protected="1" CWLid="-1" wireText="VDD" wireState="1">
             <points/>
@@ -438,9 +432,6 @@
         <wire output="84" input="568" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="20" wireText="MAIN_CLK" wireState="1">
             <points/>
         </wire>
-        <wire output="216" input="87" autoRouting="1" pen="#ff8000ff;1.00;1;32;128" lineType="2" protected="1" CWLid="16" wireText="NET16" wireState="0">
-            <points>(-192.00,-146.00); (-172.00,-146.00); (-172.00,34.00); (-415.00,34.00); (-415.00,56.00)</points>
-        </wire>
         <wire output="163" input="555" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="28" wireText="SLOW_CLK" wireState="0">
             <points>(362.00,367.00); (368.00,367.00); (368.00,346.00); (248.00,346.00); (248.00,363.00); (271.00,363.00)</points>
         </wire>
@@ -456,9 +447,6 @@
         <wire output="206" input="643" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="31" wireText="NET31" wireState="0">
             <points>(345.00,246.00); (405.00,246.00)</points>
         </wire>
-        <wire output="83" input="530" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="25" wireText="NET25" wireState="0">
-            <points>(25.00,237.00); (41.16,237.00); (41.16,321.00); (533.00,321.00)</points>
-        </wire>
         <wire output="204" input="650" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="32" wireText="NET32" wireState="0">
             <points>(190.00,241.00); (244.00,241.00)</points>
         </wire>
@@ -473,6 +461,21 @@
         </wire>
         <wire output="168" input="567" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="14" wireText="NET14" wireState="0">
             <points>(-376.00,388.00); (-352.00,388.00); (-352.00,418.00); (-472.00,418.00); (-472.00,388.00); (-457.00,388.00)</points>
+        </wire>
+        <wire output="0" input="534" autoRouting="1" pen="#ff8000ff;1.00;1;32;128" lineType="2" protected="1" CWLid="-1" wireText="VDD" wireState="1">
+            <points/>
+        </wire>
+        <wire output="164" input="533" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="15" wireText="NET15" wireState="0">
+            <points>(451.00,-233.00); (511.00,-233.00); (511.00,-240.00); (517.00,-240.00)</points>
+        </wire>
+        <wire output="39" input="557" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="-1" wireText="POR" wireState="1">
+            <points/>
+        </wire>
+        <wire output="216" input="87" autoRouting="1" pen="#ff8000ff;1.00;1;32;128" lineType="2" protected="1" CWLid="16" wireText="NET16" wireState="0">
+            <points>(-192.00,-146.00); (-172.00,-146.00); (-172.00,36.00); (-415.00,36.00); (-415.00,56.00)</points>
+        </wire>
+        <wire output="192" input="530" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="34" wireText="NET34" wireState="0">
+            <points>(-192.00,-156.00); (524.00,-156.00)</points>
         </wire>
         <textLabel pos="(-127.57,27.53)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">Count the total number of pulses.
 Use CNT2 and CNT4 because
@@ -490,7 +493,7 @@ Unused for now.</textLabel>
         <settings>
             <autoApply value="0"/>
             <programmingOptions programNVM="1" programEEPROM="0"/>
-            <platformSelector id="3"/>
+            <platformSelector id="4"/>
         </settings>
         <platform id="0" friendlyName="GreenPAK DIP Development Platform">
             <lastConfiguration modified="0">
@@ -625,6 +628,30 @@ Unused for now.</textLabel>
             <savedConfigurations/>
         </platform>
         <platform id="12" friendlyName="GreenPAK Lite Development Platform">
+            <lastConfiguration modified="0">
+                <SaveEmulator Name="Default">
+                    <PowerOptions synced="0"/>
+                    <PowerSwitch internalPower="1" externalPower="0"/>
+                    <ExpansionConnector></ExpansionConnector>
+                    <TestPoints/>
+                    <I2C slaveAddress="-1"/>
+                </SaveEmulator>
+            </lastConfiguration>
+            <savedConfigurations/>
+        </platform>
+        <platform id="13" friendlyName="HVPAK Demo Board">
+            <lastConfiguration modified="0">
+                <SaveEmulator Name="Default">
+                    <PowerOptions synced="0"/>
+                    <PowerSwitch internalPower="1" externalPower="0"/>
+                    <ExpansionConnector></ExpansionConnector>
+                    <TestPoints/>
+                    <I2C slaveAddress="-1"/>
+                </SaveEmulator>
+            </lastConfiguration>
+            <savedConfigurations/>
+        </platform>
+        <platform id="14" friendlyName="SLG47105V Training Board">
             <lastConfiguration modified="0">
                 <SaveEmulator Name="Default">
                     <PowerOptions synced="0"/>
@@ -1203,9 +1230,9 @@ Unused for now.</textLabel>
     <metadata>
         <autosavePreset>-1</autosavePreset>
         <currentPreset>-1</currentPreset>
-        <version>1</version>
+        <version>3</version>
     </metadata>
-    <presetList />
+    <presetList/>
 </logicAnalyzer>
 
 </GPDProject>

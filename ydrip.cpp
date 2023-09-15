@@ -33,6 +33,8 @@ namespace esphome::ydrip {
 
 #define MAX_LEAK_RESET_COUNT 5
 
+#define VBATT_PIN GPIO_NUM_18
+
 // FRAM memory address
 #define CONFIG_ADDR      1
 
@@ -43,6 +45,7 @@ namespace esphome::ydrip {
 
 static const char* const TAG = "YDrip.Sensor";
 static QueueHandle_t interruptQueue;
+static bool led_on = false;
 
 Ydrip::Ydrip(uint16_t wakeup_pulse_count,
              uint8_t leak_alert_count,
@@ -184,6 +187,13 @@ void Ydrip::restore_state() {
 void Ydrip::publish_pulse() {
     pulse_sensor->publish_state(meter_state.total_pulses);
     save_state();
+    if (!led_on) {
+        led_on = true;
+        led.send_rgb(0, 0, 255);
+    } else {
+        led_on = false;
+        led.send_rgb(0, 0, 0);
+    }
 }
 
 void Ydrip::publish_leak_state() {
@@ -191,6 +201,13 @@ void Ydrip::publish_leak_state() {
     leak_sensor->publish_state(meter_state.leak_state);
     save_state();
     ESP_LOGD(TAG, "Publishing leak state: %d", meter_state.leak_state);
+    if (!led_on) {
+        led_on = true;
+        led.send_rgb(255, 0, 0);
+    } else {
+        led_on = false;
+        led.send_rgb(0, 0, 0);
+    }
 }
 
 void Ydrip::loop() {
