@@ -26,14 +26,15 @@ namespace esphome::ydrip {
 #define LEAK_PIN GPIO_NUM_18
 #define LED_PWR_PIN GPIO_NUM_1
 #define LED_DATA_PIN GPIO_NUM_2
+#define VBATT_PIN GPIO_NUM_6
+#define MAG_PIN GPIO_NUM_7
+
 #define NUM_LEDS 1
 
 #define PULSE_INTERRUPT_TYPE 1
 #define LEAK_INTERRUPT_TYPE 2
 
 #define MAX_LEAK_RESET_COUNT 5
-
-#define VBATT_PIN GPIO_NUM_18
 
 // FRAM memory address
 #define CONFIG_ADDR      1
@@ -122,6 +123,10 @@ void Ydrip::setup() {
         meter_state.leak_time = rtc->utcnow().timestamp;
         meter_state.update_time = rtc->utcnow().timestamp;
         save_state();
+
+        //start_calibration();
+        //vTaskDelay(10 / portTICK_PERIOD_MS);
+        //stop_calibration();
     } else {
         // Restore state after deep sleep
         restore_state();
@@ -217,10 +222,12 @@ void Ydrip::loop() {
         switch (interruptType) {
           case PULSE_INTERRUPT_TYPE:
               meter_state.total_pulses += this->wakeup_pulse_count;
+              ESP_LOGD(TAG, "total_pulses %d", meter_state.total_pulses);
               publish_pulse();
               break;
           case LEAK_INTERRUPT_TYPE:
               meter_state.leak_state = true;
+              ESP_LOGD(TAG, "leak pulse");
               publish_leak_state();
               break;
         }
@@ -238,6 +245,14 @@ void Ydrip::reset_leak_state() {
     publish_leak_state();
 }
 
+void Ydrip::start_calibration() {
+    water_meter.start_calibration();
+}
+
+void Ydrip::stop_calibration() {
+    water_meter.stop_calibration();
+}
+
 void Ydrip::reset_counter() {
     meter_state.total_pulses = 0;
     publish_pulse();
@@ -248,7 +263,7 @@ float Ydrip::get_setup_priority() const {
 }
 
 void Ydrip::update() {
-    //ESP_LOGD(TAG, "Number: %d", water_meter.get_pulse_count());
+
 }
 
 void Ydrip::dump_config() {

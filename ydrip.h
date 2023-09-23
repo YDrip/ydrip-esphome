@@ -36,6 +36,8 @@ class Ydrip : public esphome::PollingComponent {
     void dump_config() override;
     void reset_counter();
     void reset_leak_state();
+    void start_calibration();
+    void stop_calibration();
     uint32_t get_pulse_count();
     void register_write(int reg, int val);
 

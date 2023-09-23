@@ -20,6 +20,8 @@ class WaterMeterReader {
     void set_clock_div(uint32_t div);
     esp_err_t reset_leak_counter();
     esp_err_t reset_usage_counter();
+    esp_err_t start_calibration();
+    esp_err_t stop_calibration();
     void dump_config();
 
     static size_t write_bytes(uint8_t reg, const uint8_t* data, size_t len);

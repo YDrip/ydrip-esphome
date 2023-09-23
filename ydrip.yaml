@@ -18,8 +18,8 @@ esphome:
         condition:
           api.connected:
         then:
-          - delay: 5s
-            - deep_sleep.enter:
+            #- delay: 5s
+            #- deep_sleep.enter:
   on_shutdown:
     # Leaving wifi on increases sleep current by 1.4uA so turn it off. Maybe turnning of the ADC is better?
     # https://github.com/esphome/issues/issues/1668
@@ -30,7 +30,7 @@ deep_sleep:
     mode: ANY_HIGH
     pins:
       - GPIO8
-      - GPIO3
+      - GPIO8
 
 esp32:
   board: esp32-s3-devkitc-1
@@ -83,7 +83,7 @@ sensor:
                 return id(server_water_usage).state == id(water_sensor).state;
             then:
               - logger.log: "Values are equal"
-              #- deep_sleep.enter:
+              - deep_sleep.enter:
             else:
               - logger.log: "Values are different"
 
@@ -105,12 +105,24 @@ button:
       lambda: |-
         auto ydrip = static_cast<esphome::ydrip::Ydrip*>(id(ydrip_id));
         return ydrip->reset_leak_state();
+  - platform: template
+    name: "Start Cal"
+    on_press:
+      lambda: |-
+        auto ydrip = static_cast<esphome::ydrip::Ydrip*>(id(ydrip_id));
+        return ydrip->start_calibration();
+  - platform: template
+    name: "Stop Cal"
+    on_press:
+      lambda: |-
+        auto ydrip = static_cast<esphome::ydrip::Ydrip*>(id(ydrip_id));
+        return ydrip->stop_calibration();
 
 globals:
      # The number of pulses from the water meter required to wake up the CPU
    - id: wakeup_pulse_count
      type: int
-     initial_value: '1024'
+     initial_value: '2'
 
      # Number of low frequency pules from the water meter required to wake up the CPU
    - id: leak_alert_count

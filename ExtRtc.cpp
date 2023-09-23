@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include <time.h>
 #include "esp_err.h"
+#include "esphome/core/log.h"
 #include "esphome/components/i2c/i2c.h"
 
 #include "ExtRtc.h"
