@@ -18,8 +18,8 @@ esphome:
         condition:
           api.connected:
         then:
-            #- delay: 5s
-            #- deep_sleep.enter:
+            - delay: 5s
+            - deep_sleep.enter:
   on_shutdown:
     # Leaving wifi on increases sleep current by 1.4uA so turn it off. Maybe turnning of the ADC is better?
     # https://github.com/esphome/issues/issues/1668
@@ -29,8 +29,7 @@ deep_sleep:
   esp32_ext1_wakeup:
     mode: ANY_HIGH
     pins:
-      - GPIO8
-      - GPIO8
+      - 8
 
 esp32:
   board: esp32-s3-devkitc-1
@@ -69,8 +68,8 @@ time:
 
 sensor:
   - platform: template
-    name: "Water Usage"
-    unit_of_measurement: "L"
+    name: "Power Usage"
+    unit_of_measurement: "Wh"
     id: water_sensor
   - platform: homeassistant
     id: server_water_usage
@@ -86,6 +85,7 @@ sensor:
               - deep_sleep.enter:
             else:
               - logger.log: "Values are different"
+
 
 binary_sensor:
   - platform: template
@@ -122,7 +122,7 @@ globals:
      # The number of pulses from the water meter required to wake up the CPU
    - id: wakeup_pulse_count
      type: int
-     initial_value: '2'
+     initial_value: '5'
 
      # Number of low frequency pules from the water meter required to wake up the CPU
    - id: leak_alert_count
