@@ -1,3 +1,6 @@
+############### Board specific config ####################
+# You probably don't need to change anything here #
+
 esphome:
   name: ydrip
   friendly_name: "Water meter"
@@ -23,6 +26,23 @@ external_components:
 #      type: local
 #      path: ydrip_components
 
+i2c:
+  sda: 4
+  scl: 5
+  frequency: 400kHz
+
+# Required so sensors don't show unavailable in HA dashboard
+deep_sleep:
+
+logger:
+  level: DEBUG
+  #hardware_uart: UART0
+
+# Comment out "hardware_uart: UART0" above to enable improv serial
+improv_serial:
+
+############### Water meter config  ####################
+
 sensor:
   - platform: ydrip
     id: ydrip_sensor
@@ -36,25 +56,21 @@ sensor:
     battery_level:
       name: "Battery Level"
 
-i2c:
-  sda: 4
-  scl: 5
-  frequency: 400kHz
-
-# Create a file named wifi.yaml that contains the following
-#  ssid: "your_ssid"
-#  password: "your_wifi_password"
-#  fast_connect: true
-wifi:
-  !include wifi.yaml
+############### ESPHome variables ####################
 
 api:
+  encryption:
+    key: ""
 
-deep_sleep:
+ota:
+  - platform: esphome
+    password: ""
 
-logger:
-  level: DEBUG
-  #hardware_uart: UART0
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
 
-# Comment out "hardware_uart: UART0" above to enable improv serial
-improv_serial:
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Home Fallback Hotspot"
+    password: ""

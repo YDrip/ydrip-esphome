@@ -7,7 +7,7 @@ Features
 --------
 
 - Configurable number of water meter magnet rotations to wake up the device
-- Ultra low power when sleeping (55uA @ 4.5V)
+- Ultra low power when sleeping (80uA @ 4.5V)
 - Easy integration with the ESPHome ecosystem
 
 Requirements
@@ -23,21 +23,7 @@ Getting Started
 
 2. Clone or download the YDrip repository.
 
-3. Configure the YDrip sensor in your ESPHome YAML configuration file, specifying the number of water meter magnet rotations to wake up the device. Larger numbers improve battery life.
-
-   ```yaml
-   sensor:
-     - platform: custom
-       lambda: |-
-         uint16_t wakeup_count = 11; // equal to 11 rotations of the water meter
-         auto ydrip_sensor = new esphome::ydrip::Ydrip(wakeup_count);
-         App.register_component(ydrip_sensor);
-         return {ydrip_sensor};
-       sensors:
-         name: "YDrip"
-         unit_of_measurement: 'L'
-         accuracy_decimals: 0	
-   ```
+3. Configure the YDrip sensor in your ESPHome YAML configuration file (see ydrip.yaml), specifying the number of water meter magnet rotations to wake up the device. Larger numbers improve battery life.
 
    Flash the device.
    
