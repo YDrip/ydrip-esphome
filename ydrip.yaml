@@ -1,154 +1,60 @@
 esphome:
   name: ydrip
-  includes:
-    - ydrip.h
-    - ydrip.cpp
-    - ExtRtc.h
-    - ExtRtc.cpp
-    - StatusLED.h
-    - StatusLED.cpp
-    - Fram.h
-    - Fram.cpp
-    - WaterMeterReader.h
-    - WaterMeterReader.cpp
-  libraries:
-      - Wire
-  on_loop:
-    - if:
-        condition:
-          api.connected:
-        then:
-            #- delay: 5s
-            #- deep_sleep.enter:
-  on_shutdown:
-    # Leaving wifi on increases sleep current by 1.4uA so turn it off. Maybe turnning of the ADC is better?
-    # https://github.com/esphome/issues/issues/1668
-    - lambda: WiFi.mode(WIFI_OFF);
-
-deep_sleep:
-  esp32_ext1_wakeup:
-    mode: ANY_HIGH
-    pins:
-      - GPIO8
-      - GPIO8
+  friendly_name: "Water meter"
+  platformio_options:
+    board_build.flash_mode: dio
 
 esp32:
   board: esp32-s3-devkitc-1
-
+  variant: esp32s3
   framework:
-    type: arduino
-    platform_version: platformio/espressif32 @ 5.2.0
+    type: esp-idf
 
-api:
-  services:
-    - service: reset_ydrip_counter
-      then:
-        lambda: |-
-          auto ydrip = static_cast<esphome::ydrip::Ydrip*>(id(ydrip_id));
-          return ydrip->reset_counter();
-    # For debugging
-    - service: register_write
-      variables:
-          value1: int
-          value2: int
-      then:
-        lambda: |-
-          auto ydrip = static_cast<esphome::ydrip::Ydrip*>(id(ydrip_id));
-          return ydrip->register_write(value1, value2);
+external_components:
+  - source:
+      type: git
+      url: https://github.com/YDrip/ydrip-esphome.git
+      ref: main
+    components: [ ydrip ]
 
-wifi:
-  !include wifi.yaml
-
-time:
-  - platform: sntp
-    id: my_time
-    servers:
-      - time.google.com
-      - time2.google.com
-      - time3.google.com
+# For local development
+#external_components:
+#  - source:
+#      type: local
+#      path: ydrip_components
 
 sensor:
-  - platform: template
-    name: "Water Usage"
-    unit_of_measurement: "L"
-    id: water_sensor
-  - platform: homeassistant
-    id: server_water_usage
-    entity_id: sensor.water_usage
-    on_value:
-      then:
-        - if:
-            condition:
-              lambda: |-
-                return id(server_water_usage).state == id(water_sensor).state;
-            then:
-              - logger.log: "Values are equal"
-              - deep_sleep.enter:
-            else:
-              - logger.log: "Values are different"
-
-binary_sensor:
-  - platform: template
-    name: "Leak"
-    id: leak_sensor
-
-button:
-  - platform: template
-    name: "Reset Usage"
-    on_press:
-      lambda: |-
-        auto ydrip = static_cast<esphome::ydrip::Ydrip*>(id(ydrip_id));
-        return ydrip->reset_counter();
-  - platform: template
-    name: "Reset Leak State"
-    on_press:
-      lambda: |-
-        auto ydrip = static_cast<esphome::ydrip::Ydrip*>(id(ydrip_id));
-        return ydrip->reset_leak_state();
-  - platform: template
-    name: "Start Cal"
-    on_press:
-      lambda: |-
-        auto ydrip = static_cast<esphome::ydrip::Ydrip*>(id(ydrip_id));
-        return ydrip->start_calibration();
-  - platform: template
-    name: "Stop Cal"
-    on_press:
-      lambda: |-
-        auto ydrip = static_cast<esphome::ydrip::Ydrip*>(id(ydrip_id));
-        return ydrip->stop_calibration();
-
-globals:
-     # The number of pulses from the water meter required to wake up the CPU
-   - id: wakeup_pulse_count
-     type: int
-     initial_value: '2'
-
-     # Number of low frequency pules from the water meter required to wake up the CPU
-   - id: leak_alert_count
-     type: int
-     initial_value: '3'
-
-     #
-   - id: low_freq_detect_thesh
-     type: float
-     initial_value: '0.25'
-
-custom_component:
-#  - platform: custom
-  #id: ydrip_id
-  lambda: |-
-    auto ydrip_sensor = new esphome::ydrip::Ydrip(id(wakeup_pulse_count), id(leak_alert_count), id(low_freq_detect_thesh), id(water_sensor), id(leak_sensor));
-    ydrip_sensor->rtc = id(my_time);
-    App.register_component(ydrip_sensor);
-    return {ydrip_sensor};
-  components:
-    - id: ydrip_id
+  - platform: ydrip
+    id: ydrip_sensor
+    usage_alert_count: 1024
+    leak_alert_count: 32
+    low_freq_leak_thresh: 0.125
+    usage:
+      name: "Water Usage"
+    leak:
+      name: "Leak Detection"
+    battery_level:
+      name: "Battery Level"
 
 i2c:
   sda: 4
   scl: 5
-  scan: False
+  frequency: 400kHz
+
+# Create a file named wifi.yaml that contains the following
+#  ssid: "your_ssid"
+#  password: "your_wifi_password"
+#  fast_connect: true
+wifi:
+  !include wifi.yaml
+
+api:
+
+deep_sleep:
 
 logger:
   level: DEBUG
+  #hardware_uart: UART0
+
+# Comment out "hardware_uart: UART0" above to enable improv serial
+improv_serial:

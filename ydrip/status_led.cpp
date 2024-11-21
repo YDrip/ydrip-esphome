@@ -3,7 +3,7 @@
 #include "esphome/core/helpers.h"
 #include <math.h>
 
-#include "StatusLED.h"
+#include "status_led.h"
 
 #define RMT_CHANNEL RMT_CHANNEL_0
 
@@ -28,6 +28,10 @@ void StatusLED::init(gpio_num_t pin) {
 
     // Send initial state to the LED (turn it off)
     this->send_rgb(0, 0, 0);
+}
+
+void StatusLED::set_color(const LEDColor& color) {
+    this->send_rgb(color.r, color.g, color.b);
 }
 
 void StatusLED::send_rgb(uint8_t r, uint8_t g, uint8_t b) {
@@ -98,7 +102,7 @@ void hsv_to_rgb(float h, float s, float v, float& r, float& g, float& b) {
     b = b1 + m;
 }
 
-void StatusLED::breathe(int base_r, int base_g, int base_b) {
+void StatusLED::breathe(const LEDColor& color) {
     static float intensity = 0.0f;
     static float direction = 0.01f;
 
@@ -113,9 +117,9 @@ void StatusLED::breathe(int base_r, int base_g, int base_b) {
     }
 
     // Adjust the RGB values based on the intensity
-    float r = base_r / 255.0f * intensity;
-    float g = base_g / 255.0f * intensity;
-    float b = base_b / 255.0f * intensity;
+    float r = color.r / 255.0f * intensity;
+    float g = color.g / 255.0f * intensity;
+    float b = color.b / 255.0f * intensity;
 
     this->send_rgb(r * 255, g * 255, b * 255);
 }
