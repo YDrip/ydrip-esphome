@@ -533,6 +533,8 @@ void YDripComponent::setup() {
         ESP_LOGI(TAG, "Disabling ACMP0 sampling mode");
         update_register(ACMP0_CONFIG_1, 0x4, 0x0);
     }
+    read_bytes_(ACMP0_CONFIG_1, &acmp0_config_value, sizeof(acmp0_config_value));
+    ESP_LOGD(TAG, "ACMP0 register %x", acmp0_config_value);
     
     memset(&app_settings, 0, sizeof(app_settings));
 
