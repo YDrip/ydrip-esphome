@@ -21,7 +21,7 @@ namespace ydrip {
 
 static const char* const TAG = "ydrip";
 
-#define SW_VERSION                   "v0.0.1"
+#define SW_VERSION                   "v0.0.2"
 
 #define WATER_METER_READER_ADDR      ((0x02 << 3) | 1)
 
@@ -105,7 +105,7 @@ static const char* const TAG = "ydrip";
 #define CALIBRATION_TOLERANCE_MV     (2000)
 #define CALIBRATION_STEP_DIVISOR     (124/2)
 
-#define CALIBRATION_MAX_REHOSTAT_GAIN 800
+#define CALIBRATION_MAX_REHOSTAT_GAIN 1023
 #define CALIBRATION_MAX_REHOSTAT_OFFSET 1023
 
 // Calibration settings to capture min/max values of a 50 - 300 Hz sine wave
