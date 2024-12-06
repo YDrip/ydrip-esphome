@@ -220,6 +220,8 @@ class YDripComponent : public PollingComponent, public i2c::I2CDevice {
     StatusLED status_led;
     CalibrationState calibration;
     QueueHandle_t event_queue;
+
+    LEDColor cal_led_color;
 };
 
 }  // namespace ydrip

@@ -21,6 +21,8 @@ namespace ydrip {
 
 static const char* const TAG = "ydrip";
 
+#define SW_VERSION                   "v0.0.1"
+
 #define WATER_METER_READER_ADDR      ((0x02 << 3) | 1)
 
 // I2C register addresses
@@ -52,6 +54,8 @@ static const char* const TAG = "ydrip";
 #define ACMP0_HIGH_TO_LOW_ADDR       (0x4E)
 #define ACMP0_HIGH_TO_LOW_MASK       (0x3F)
 #define ACMP0_HIGH_TO_LOW_OFFSET     (0x00)
+
+#define ACMP0_CONFIG_1               (0x4C)
 
 #define I2C_GPIO_ADDR                (0x7C)
 #define WATER_METER_READER_ADDR      ((0x02 << 3) | 1)
@@ -101,6 +105,9 @@ static const char* const TAG = "ydrip";
 #define CALIBRATION_TOLERANCE_MV     (2000)
 #define CALIBRATION_STEP_DIVISOR     (124/2)
 
+#define CALIBRATION_MAX_REHOSTAT_GAIN 800
+#define CALIBRATION_MAX_REHOSTAT_OFFSET 1023
+
 // Calibration settings to capture min/max values of a 50 - 300 Hz sine wave
 
 // Sampling interval (ms): 5 ms (200 samples/sec) provides sufficient frequency for peak detection 
@@ -113,6 +120,8 @@ static const char* const TAG = "ydrip";
 #define CALIBRATION_NUM_SAMPLES (CALIBRATION_SAMPLING_DURATION_MS / CALIBRATION_SAMPLE_INTERVAL_MS)
 
 #define CALIBRATION_HYSTERESIS_MIN   (100)
+
+#define CALIBRATION_OFFSET           (52)
 
 #if CONFIG_IDF_TARGET_ESP32
 #define ADC_CALI_SCHEME     ESP_ADC_CAL_VAL_EFUSE_VREF
@@ -169,8 +178,8 @@ typedef enum {
 
 const LEDColor COLOR_OFF = {0, 0, 0};
 const LEDColor COLOR_YELLOW = {255, 255, 0};
-const LEDColor COLOR_GREEN = {0, 255, 0};
 const LEDColor COLOR_RED = {255, 0, 0};
+const LEDColor COLOR_GREEN = {0, 255, 0};
 const LEDColor COLOR_BLUE = {0, 0, 255};
 const LEDColor COLOR_ORANGE = {255, 165, 0};
 const LEDColor COLOR_PURPLE = {128, 0, 128};
@@ -180,7 +189,7 @@ const LEDColor COLOR_LIME = {0, 255, 128};
 const LEDColor COLOR_PINK = {255, 105, 180};
 const LEDColor COLOR_LIGHT_BLUE = {173, 216, 230};
 const LEDColor COLOR_WHITE = {255, 255, 255};
-const LEDColor COLOR_LIGHT_GREEN = {144, 238, 144};
+const LEDColor COLOR_LIGHT_GREEN = {0, 128, 0};
 const LEDColor COLOR_TURQUOISE = {64, 224, 208};
 
 const char* TARGET_IP = "192.168.0.51";
@@ -476,6 +485,7 @@ esp_err_t YDripComponent::load_calibration_data() {
 }
 void YDripComponent::setup() {
     ESP_LOGI(TAG, "Setting up YDrip...");
+    ESP_LOGI(TAG, "Version %s", SW_VERSION);
 
     event_queue = xQueueCreate(16, sizeof(water_meter_event_t));
     if (event_queue == nullptr) {
@@ -499,6 +509,7 @@ void YDripComponent::setup() {
     status_led.init(LED_DATA_PIN);
     gpio_set_direction(LED_PWR_PIN, GPIO_MODE_OUTPUT);
     gpio_set_level(LED_PWR_PIN, 0); // Power on LED
+    cal_led_color = COLOR_GREEN;
 
     if (!this->usage_sensor_) {
         ESP_LOGE(TAG, "No usage sensor");
@@ -513,7 +524,15 @@ void YDripComponent::setup() {
         return;
     }
 
-    wm_set_power_duty_cycle(true);
+    // HACK: Disable power saving for HW v0.4 due to hardware issues
+    wm_set_power_duty_cycle(false);
+    // disaable ACMP sampling mode since it doesn't work without duty cycling
+    uint8_t acmp0_config_value;
+    read_bytes_(ACMP0_CONFIG_1, &acmp0_config_value, sizeof(acmp0_config_value));
+    if (acmp0_config_value & 0x4) {
+        ESP_LOGI(TAG, "Disabling ACMP0 sampling mode");
+        update_register(ACMP0_CONFIG_1, 0x4, 0x0);
+    }
     
     memset(&app_settings, 0, sizeof(app_settings));
 
@@ -647,12 +666,12 @@ void YDripComponent::loop() {
 
     update_led();
 
-    static int sleep_delay = 3;
+    static int sleep_delay = 4;
     unsigned long current_time = millis();
     if (current_time - last_time_ >= 1000) {
         last_time_ = current_time;
 
-        if (sleep_delay < 0) {
+        if (sleep_delay <= 0) {
             esp_deep_sleep_start();
         }
         if (sleep_scheduled) {
@@ -681,7 +700,7 @@ void YDripComponent::update_led() {
             break;
 
         case STATE_CALIBRATED:
-            status_led.set_color(COLOR_GREEN);
+            status_led.set_color(cal_led_color);
             break;
 
         case STATE_CALIBRATING:
@@ -734,14 +753,6 @@ void YDripComponent::sleep_timer_callback(void* arg) {
 
     YDripComponent* instance = static_cast<YDripComponent*>(arg);
 
-    /*
-    esp_err_t ret = esp_wifi_stop();  // Stop Wi-Fi
-    if (ret == ESP_OK) {
-        ESP_LOGI(TAG, "Wi-Fi has been turned off.");
-    } else {
-        ESP_LOGE(TAG, "Failed to stop Wi-Fi: %s", esp_err_to_name(ret));
-    }
-    */
     esp_deep_sleep_start();
 }
 
@@ -831,6 +842,14 @@ void YDripComponent::handle_calibrated_state(water_meter_event_t event) {
         case WATER_METER_PULSE_EVENT:
             pulse_count++;
             ESP_LOGI(TAG, "Pulse count: %d", pulse_count);
+            if (cal_led_color.r == COLOR_GREEN.r &&
+                cal_led_color.g == COLOR_GREEN.g &&
+                cal_led_color.b == COLOR_GREEN.b) {
+                cal_led_color = COLOR_LIGHT_GREEN;
+            } else {
+                cal_led_color = COLOR_GREEN;
+            }
+
             break;
         case WATER_METER_USER_INPUT:
             pulse_count = 0;
@@ -868,9 +887,9 @@ void YDripComponent::handle_calibrating_state(water_meter_event_t event) {
                   ESP_LOGI(TAG, "Switching to negative direction calibration pass.");
                   // Reset search bounds for the next direction
                   this->calibration.low_non_inv = 0;
-                  this->calibration.high_non_inv = 1023;
+                  this->calibration.high_non_inv = CALIBRATION_MAX_REHOSTAT_OFFSET;
                   this->calibration.low_inv = 0;
-                  this->calibration.high_inv = 1023;
+                  this->calibration.high_inv = CALIBRATION_MAX_REHOSTAT_GAIN;
                   this->calibration.direction = -1;
                   calibration_init();
               }
@@ -891,7 +910,7 @@ void YDripComponent::handle_calibrating_state(water_meter_event_t event) {
           break;
 
       case WATER_METER_CAL_DONE:
-          wm_set_power_duty_cycle(true);
+          //wm_set_power_duty_cycle(true);
           if (calibration_done() == ESP_OK) {
               ESP_LOGI(TAG, "Calibration completed successfully.");
               current_state = STATE_CALIBRATED;
@@ -951,8 +970,8 @@ esp_err_t YDripComponent::wm_start_calibration(int target_voltage)
       .max_voltage = INT16_MIN,
       .low_non_inv = 0,
       .low_inv = 0,
-      .high_non_inv = 1023,
-      .high_inv = 1023,
+      .high_non_inv = CALIBRATION_MAX_REHOSTAT_OFFSET,
+      .high_inv = CALIBRATION_MAX_REHOSTAT_GAIN,
       .current_sample = 0,
       .attempts = 0,
       .active = true,
@@ -982,7 +1001,7 @@ void YDripComponent::calibration_init() {
 void YDripComponent::calibration_step() {
     if (!this->calibration.active) {
         this->cancel_interval("calibration_interval");
-        wm_set_power_duty_cycle(true);
+        //wm_set_power_duty_cycle(true);
         return;
     }
 
@@ -1040,6 +1059,7 @@ void YDripComponent::calibration_step_work(int direction) {
         app_settings.rheostat_value_inv_reg = rheostat_value_inv;
         app_settings.min_voltage = this->calibration.min_voltage;
         app_settings.max_voltage = this->calibration.max_voltage;
+        app_settings.target_voltage = this->calibration.target_voltage;
     }
 
     // Adjust binary search ranges based on the divergence
@@ -1094,9 +1114,13 @@ esp_err_t YDripComponent::calibration_done() {
 
 
     if (ret == ESP_OK) {
-        float hysteresis_percentage = 0.3;
-        int low_threshold = app_settings.min_voltage + (app_settings.max_voltage - app_settings.min_voltage) * hysteresis_percentage;
-        int high_threshold = app_settings.max_voltage - (app_settings.max_voltage - app_settings.min_voltage) * hysteresis_percentage;
+        //float hysteresis_percentage = 0.3;
+        //int low_threshold = app_settings.min_voltage + (app_settings.max_voltage - app_settings.min_voltage) * hysteresis_percentage;
+        //int high_threshold = app_settings.max_voltage - (app_settings.max_voltage - app_settings.min_voltage) * hysteresis_percentage;
+
+        int middle_voltage = app_settings.min_voltage + (app_settings.max_voltage - app_settings.min_voltage)/2;
+        int low_threshold = middle_voltage;
+        int high_threshold = middle_voltage + CALIBRATION_OFFSET*2;
 
         ESP_LOGI(TAG, "Setting comparator thresholds: Low = %d mV, High = %d mV", low_threshold, high_threshold);
 

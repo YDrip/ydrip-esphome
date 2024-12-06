@@ -1,3 +1,41 @@
+############### Water meter config  ####################
+# User changeable values #
+
+sensor:
+  - platform: ydrip
+    id: ydrip_sensor
+    usage_alert_count: 1024
+    leak_alert_count: 32
+    low_freq_leak_thresh: 0.125
+    usage:
+      name: "Water Usage"
+    leak:
+      name: "Leak Detection"
+    battery_level:
+      name: "Battery Level"
+
+############### ESPHome variables ####################
+# User changeable values #
+
+api:
+#  encryption:
+#    key: ""
+
+#ota:
+#  - platform: esphome
+#    password: ""
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  fast_connect: true
+  power_save_mode: HIGH
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+ # ap:
+ #   ssid: "Home Fallback Hotspot"
+ #   password: ""
+
 ############### Board specific config ####################
 # You probably don't need to change anything here #
 
@@ -24,7 +62,7 @@ external_components:
 #external_components:
 #  - source:
 #      type: local
-#      path: ydrip_components
+#      path: components
 
 i2c:
   sda: 4
@@ -41,36 +79,6 @@ logger:
 # Comment out "hardware_uart: UART0" above to enable improv serial
 improv_serial:
 
-############### Water meter config  ####################
-
-sensor:
-  - platform: ydrip
-    id: ydrip_sensor
-    usage_alert_count: 1024
-    leak_alert_count: 32
-    low_freq_leak_thresh: 0.125
-    usage:
-      name: "Water Usage"
-    leak:
-      name: "Leak Detection"
-    battery_level:
-      name: "Battery Level"
-
-############### ESPHome variables ####################
-
-api:
-  encryption:
-    key: ""
-
-ota:
-  - platform: esphome
-    password: ""
-
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "Home Fallback Hotspot"
-    password: ""
+# Required since YDrip deep sleeps often which looks like a hard reset to ESPHome
+safe_mode:
+  disabled: true
