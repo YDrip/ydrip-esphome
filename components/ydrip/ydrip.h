@@ -111,6 +111,8 @@ class YDripComponent : public PollingComponent, public i2c::I2CDevice {
   void set_usage_alert_count(uint16_t count);
   void set_leak_alert_count(uint16_t count);
   void set_low_freq_leak_thresh(double threshold);
+  void set_debug_ip(const std::string &debug_ip);
+  void set_debug_port(const uint16_t &debug_port);
   void api_callback(float state);
   uint32_t read_adc_battery_voltage();
 
@@ -171,6 +173,8 @@ class YDripComponent : public PollingComponent, public i2c::I2CDevice {
   uint16_t usage_alert_count_{0};
   uint16_t leak_alert_count_{0};
   double low_freq_leak_thresh_{0.0};
+  std::string debug_ip_;
+  uint16_t debug_port_;
 
   esp_sleep_wakeup_cause_t wakeup_reason;
 

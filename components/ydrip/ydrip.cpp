@@ -192,9 +192,6 @@ const LEDColor COLOR_WHITE = {255, 255, 255};
 const LEDColor COLOR_LIGHT_GREEN = {0, 128, 0};
 const LEDColor COLOR_TURQUOISE = {64, 224, 208};
 
-const char* TARGET_IP = "192.168.0.51";
-const int TARGET_PORT = 8888;
-
 // Function to get the numerical value of the OSC0 divider
 static int get_osc0_divider_value(osc0_divider_t value) {
     switch (value) {
@@ -1214,16 +1211,16 @@ void YDripComponent::publish_debug_state() {
 
     // Configure the target address
     struct sockaddr_in dest_addr;
-    dest_addr.sin_addr.s_addr = inet_addr(TARGET_IP);
+    dest_addr.sin_addr.s_addr = inet_addr(this->debug_ip_.c_str());
     dest_addr.sin_family = AF_INET;
-    dest_addr.sin_port = htons(TARGET_PORT);
+    dest_addr.sin_port = htons(this->debug_port_);
 
     // Send the debug info over UDP
     int err = sendto(sock, debug_info, strlen(debug_info), 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
     if (err < 0) {
         ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
     } else {
-        ESP_LOGI(TAG, "Message sent successfully to %s:%d", TARGET_IP, TARGET_PORT);
+        ESP_LOGI(TAG, "Message sent successfully to %s:%d", this->debug_ip_.c_str(), this->debug_port_);
     }
 
     close(sock);
@@ -1344,6 +1341,14 @@ void YDripComponent::set_leak_alert_count(uint16_t count) {
 
 void YDripComponent::set_low_freq_leak_thresh(double threshold) {
     low_freq_leak_thresh_ = threshold;
+}
+
+void YDripComponent::set_debug_ip(const std::string &debug_ip) {
+  this->debug_ip_ = debug_ip;
+}
+
+void YDripComponent::set_debug_port(const uint16_t &debug_port) {
+  this->debug_port_ = debug_port;
 }
 
 esp_err_t YDripComponent::wm_set_slow_clock(slow_clock_frequency_t desired_freq) {

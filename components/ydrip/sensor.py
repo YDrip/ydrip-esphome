@@ -29,6 +29,8 @@ CONF_USAGE_ALERT_COUNT = "usage_alert_count"
 CONF_LEAK_ALERT_COUNT = "leak_alert_count"
 CONF_LOW_FREQ_LEAK_THRESH = "low_freq_leak_thresh"
 CONF_BATTERY_LEVEL = "battery_level"
+CONF_DEBUG_IP = "debug_ip"
+CONF_DEBUG_PORT = "debug_port"
 
 # Define schema for configuration
 CONFIG_SCHEMA = cv.Schema(
@@ -56,6 +58,8 @@ CONFIG_SCHEMA = cv.Schema(
             state_class=STATE_CLASS_MEASUREMENT,
             entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
+        cv.Optional(CONF_DEBUG_IP, default="192.168.0.1"): cv.ipv4,
+        cv.Optional(CONF_DEBUG_PORT, default="8888"): cv.port,
 
     }
 ).extend(cv.polling_component_schema("60s")).extend(i2c.i2c_device_schema(0x10))
@@ -91,3 +95,11 @@ async def to_code(config):
     if CONF_BATTERY_LEVEL in config:
         battery_sensor = await sensor.new_sensor(config[CONF_BATTERY_LEVEL])
         cg.add(var.set_battery_sensor(battery_sensor))
+
+    # Handle debug IP
+    if CONF_DEBUG_IP in config:
+        cg.add(var.set_debug_ip(str(config[CONF_DEBUG_IP])))
+
+    # Handle debug port
+    if CONF_DEBUG_PORT in config:
+        cg.add(var.set_debug_port(config[CONF_DEBUG_PORT]))

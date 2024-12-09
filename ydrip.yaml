@@ -13,6 +13,8 @@ sensor:
       name: "Leak Detection"
     battery_level:
       name: "Battery Level"
+    debug_ip: 192.168.0.51
+    debug_port: 8888
 
 ############### ESPHome variables ####################
 # User changeable values #
