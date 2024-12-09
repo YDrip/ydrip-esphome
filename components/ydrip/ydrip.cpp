@@ -21,7 +21,7 @@ namespace ydrip {
 
 static const char* const TAG = "ydrip";
 
-#define SW_VERSION                   "v0.0.2"
+#define SW_VERSION                   "v0.0.3"
 
 #define WATER_METER_READER_ADDR      ((0x02 << 3) | 1)
 
